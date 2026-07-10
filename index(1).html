@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>可视化文档 · 🎉 您的门店已就绪</title>
+  <!-- Font Awesome 5 (免费图标库) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: linear-gradient(145deg, #f4fbff 0%, #eefaf4 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      padding: 24px;
+    }
+
+    .card {
+      max-width: 820px;
+      width: 100%;
+      background: #ffffff;
+      border-radius: 32px;
+      box-shadow: 0 18px 45px rgba(29,116,245,0.12);
+      overflow: hidden;
+      transition: all 0.2s ease;
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      backdrop-filter: blur(2px);
+    }
+
+    /* 头部 — 门店就绪 + 信息块 */
+    .header {
+      background: #1d74f5;
+      padding: 32px 36px 24px 36px;
+      color: #ffffff;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .header::after {
+      content: "✨";
+      position: absolute;
+      right: 24px;
+      top: 16px;
+      font-size: 48px;
+      opacity: 0.2;
+      transform: rotate(8deg);
+    }
+
+    .header h1 {
+      font-size: 28px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .header h1 i {
+      color: #ffd966;
+      font-size: 28px;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+    }
+
+    .store-meta {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 28px 40px;
+      margin-top: 6px;
+      background: rgba(255, 255, 255, 0.06);
+      padding: 14px 18px;
+      border-radius: 60px;
+      backdrop-filter: blur(4px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .store-meta .item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 15px;
+      font-weight: 450;
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    .store-meta .item i {
+      width: 20px;
+      color: #36b39a;
+      font-size: 15px;
+    }
+
+    .store-meta .item strong {
+      font-weight: 600;
+      color: #ffffff;
+    }
+
+    .store-meta .item a {
+      color: #b9f0df;
+      text-decoration: none;
+      border-bottom: 1px dotted rgba(255,255,255,0.25);
+      transition: border 0.2s;
+      font-weight: 500;
+      word-break: break-all;
+    }
+
+    .store-meta .item a:hover {
+      border-bottom-color: #ffffff;
+      color: #ffffff;
+    }
+
+    /* 内容主体 */
+    .body-content {
+      padding: 32px 36px 36px 36px;
+    }
+
+    /* 两步走卡片布局 */
+    .steps-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+      margin: 8px 0 12px 0;
+    }
+
+    .step-card {
+      background: #ffffff;
+      border-radius: 28px;
+      padding: 22px 28px 26px 28px;
+      border: 1px solid #e1f1ea;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+      transition: box-shadow 0.15s;
+    }
+
+    .step-card:hover {
+      box-shadow: 0 8px 20px rgba(0, 20, 30, 0.06);
+    }
+
+    .step-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+
+    .step-number {
+      background: #1d74f5;
+      color: #ffffff;
+      width: 34px;
+      height: 34px;
+      border-radius: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+
+    .step-title {
+      font-size: 20px;
+      font-weight: 600;
+      color: #1f2937;
+      letter-spacing: -0.01em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .step-title i {
+      color: #1f9d8b;
+      font-size: 18px;
+    }
+
+    .step-desc {
+      padding-left: 48px;
+      color: #1f3a4b;
+    }
+
+    .step-desc p {
+      margin-bottom: 12px;
+      line-height: 1.5;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .step-desc p i {
+      color: #2f9e8f;
+      width: 20px;
+      font-size: 15px;
+      margin-top: 3px;
+    }
+
+    .action-badge {
+      display: inline-block;
+      background: #e9f8f2;
+      border-radius: 40px;
+      padding: 4px 16px 4px 14px;
+      font-size: 14px;
+      font-weight: 500;
+      color: #1f2937;
+      margin-right: 6px;
+      border: 1px solid #cfeade;
+    }
+
+    .action-badge i {
+      margin-right: 6px;
+      color: #198f73;
+    }
+
+    .highlight-box {
+      background: #ffffff;
+      border-radius: 18px;
+      padding: 14px 18px;
+      margin: 12px 0 6px 0;
+      border-left: 5px solid #22c55e;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+      font-size: 15px;
+      color: #1e3a4e;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .highlight-box i {
+      color: #16a34a;
+      font-size: 18px;
+    }
+
+    .highlight-box a {
+      color: #0f766e;
+      font-weight: 500;
+      text-decoration: none;
+      border-bottom: 1px dashed #9fd8c8;
+    }
+
+    .highlight-box a:hover {
+      border-bottom-style: solid;
+      color: #0b5f57;
+    }
+
+    .divider-light {
+      border: 0;
+      height: 1px;
+      background: linear-gradient(to right, transparent, #d8efe4, transparent);
+      margin: 18px 0 20px 0;
+    }
+
+    /* 底部 预配 + 教程 + 联系 */
+    .footer-actions {
+      margin-top: 32px;
+      background: #f3fbf8;
+      border-radius: 28px;
+      padding: 20px 24px 22px 24px;
+      border: 1px solid #dcefe8;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px 20px;
+    }
+
+    .preconfigured {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .preconfigured .check-badge {
+      background: #18a058;
+      color: #ffffff;
+      padding: 6px 16px 6px 14px;
+      border-radius: 40px;
+      font-weight: 500;
+      font-size: 15px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      letter-spacing: 0.3px;
+    }
+
+    .preconfigured .check-badge i {
+      font-size: 14px;
+    }
+
+    .preconfigured span {
+      color: #22577a;
+      font-weight: 450;
+      background: white;
+      padding: 5px 18px 5px 16px;
+      border-radius: 40px;
+      border: 1px solid #cfe8de;
+      font-size: 14px;
+    }
+
+    .link-group {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
+    .link-group a {
+      color: #166a8f;
+      text-decoration: none;
+      font-weight: 500;
+      border-bottom: 2px solid transparent;
+      transition: 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 15px;
+    }
+
+    .link-group a i {
+      color: #18a58e;
+      font-size: 15px;
+    }
+
+    .link-group a:hover {
+      border-bottom-color: #166a8f;
+      color: #114a63;
+    }
+
+    .support-tag {
+      background: #e7f7ef;
+      border-radius: 40px;
+      padding: 6px 20px 6px 18px;
+      font-weight: 500;
+      color: #165067;
+      font-size: 14px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+    }
+
+
+    .support-tag i {
+      color: #18a058;
+    }
+
+    /* 已完成配置模块（方案一） */
+    .setup-summary {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      min-width: 280px;
+      flex: 1;
+    }
+
+    .setup-title {
+      color: #1f2937;
+      font-size: 18px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .setup-title i {
+      color: #18a058;
+    }
+
+    .setup-subtitle {
+      color: #4e6e7f;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .setup-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 12px;
+      margin-top: 2px;
+    }
+
+    .setup-item {
+      background: #ffffff;
+      border: 1px solid #cfe8de;
+      border-radius: 40px;
+      padding: 7px 16px 7px 14px;
+      font-size: 14px;
+      color: #22577a;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 500;
+    }
+
+    .setup-item i {
+      color: #18a058;
+    }
+
+    .setup-note {
+      background: #edf9f3;
+      color: #1d7a45;
+      border: 1px solid #cdebd8;
+      border-radius: 14px;
+      padding: 10px 14px;
+      font-size: 14px;
+      line-height: 1.5;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      width: fit-content;
+      max-width: 100%;
+    }
+
+    .setup-note i {
+      color: #18a058;
+    }
+
+    /* 操作链接按钮 (新增) */
+    .btn-primary-link {
+      display: inline-block;
+      background: #1d74f5;
+      color: #ffffff;
+      padding: 8px 24px 8px 22px;
+      border-radius: 40px;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 15px;
+      box-shadow: 0 4px 10px rgba(11, 43, 63, 0.15);
+      transition: background 0.2s, transform 0.1s;
+      border: none;
+      margin-top: 6px;
+    }
+
+    .btn-primary-link i {
+      margin-right: 6px;
+    }
+
+    .btn-primary-link:hover {
+      background: #1557c0;
+      color: #ffffff;
+      transform: scale(1.01);
+    }
+
+    /* 三个独立功能按钮 */
+    .quick-entry-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    .quick-entry-btn {
+      text-decoration: none;
+      background: #ffffff;
+      border: 1px solid #d7ece4;
+      border-radius: 18px;
+      padding: 16px 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      color: #1f2937;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+      transition: all 0.18s ease;
+      min-height: 96px;
+    }
+
+    .quick-entry-btn i {
+      font-size: 22px;
+      color: #169c7d;
+    }
+
+    .quick-entry-btn strong {
+      font-size: 16px;
+      font-weight: 600;
+      color: #1f2937;
+    }
+
+    .quick-entry-btn span {
+      font-size: 13px;
+      color: #64808f;
+      text-align: center;
+      line-height: 1.4;
+    }
+
+    .quick-entry-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(11, 43, 63, 0.08);
+      border-color: #b9e3d4;
+      background: #f6fcfa;
+    }
+
+    /* 响应式 */
+    @media (max-width: 640px) {
+      .header {
+        padding: 24px 20px 18px 20px;
+      }
+      .body-content {
+        padding: 24px 18px 28px 18px;
+      }
+      .step-desc {
+        padding-left: 0;
+        margin-top: 6px;
+      }
+      .step-card {
+        padding: 18px 18px 20px 18px;
+      }
+      .store-meta {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+        border-radius: 28px;
+        padding: 14px 16px;
+      }
+      .footer-actions {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 14px;
+      }
+      .link-group {
+        justify-content: flex-start;
+      }
+      .header h1 {
+        font-size: 24px;
+      }
+    }
+
+    @media (max-width: 450px) {
+      .step-title {
+        font-size: 17px;
+      }
+      .highlight-box {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .btn-primary-link {
+        width: 100%;
+        text-align: center;
+      }
+      .quick-entry-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .text-muted {
+      color: #64808f;
+      font-size: 14px;
+    }
+
+    .mt-1 { margin-top: 6px; }
+  </style>
+</head>
+<body>
+<div class="card">
+
+  <!-- 头部区域：门店已就绪 + 门店/MID/后台 -->
+  <div class="header">
+    <h1>
+      <i class="fas fa-store-alt"></i> 🎉 您的门店已就绪
+    </h1>
+    <div class="store-meta">
+      <span class="item">
+        <i class="fas fa-desktop"></i>
+        后台：
+        <a href="https://admin.5laoban.com/" target="_blank">https://admin.5laoban.com/</a>
+      </span>
+    </div>
+  </div>
+
+  <!-- 主体内容 -->
+  <div class="body-content">
+
+    <!-- 两步走 -->
+    <div class="steps-grid">
+
+      <!-- 步骤 1：调整商品价格 (已加入可点击链接) -->
+      <div class="step-card">
+        <div class="step-header">
+          <span class="step-number">1</span>
+          <span class="step-title">
+            <i class="fas fa-tags"></i> 调整商品价格
+          </span>
+        </div>
+        <div class="step-desc">
+          <p>
+            <i class="fas fa-sign-in-alt"></i>
+            <span>
+              <a href="https://admin.5laoban.com/#/seat/list?__from=v3nf" target="_blank" style="font-weight: 700; color: #1f2937; border-bottom: 2px solid #22c55e; text-decoration: none; padding-bottom: 2px;">
+                登录后台 <i class="fas fa-external-link-alt" style="font-size: 12px; margin-left: 4px;"></i>
+              </a>
+              → 选择下方对应入口，分别修改包厢 / 套餐配置 / 卡券价格，保存即生效
+            </span>
+          </p>
+          <div class="highlight-box">
+            <i class="fas fa-lightbulb"></i>
+            <span><strong>定价参考：</strong>可参考美团 / 大众点评同行</span>
+          </div>
+          <div class="quick-entry-grid">
+            <a href="https://admin.5laoban.com/#/seat/list?__from=v3nf" target="_blank" class="quick-entry-btn">
+              <i class="fas fa-edit"></i>
+              <strong>包厢设置</strong>
+              <span>进入包厢价格配置</span>
+            </a>
+            <a href="https://admin.5laoban.com/#/orders/packagecost" target="_blank" class="quick-entry-btn">
+              <i class="fas fa-coins"></i>
+              <strong>套餐配置</strong>
+              <span>进入套餐配置配置</span>
+            </a>
+            <a href="https://admin.5laoban.com/#/coupon/list" target="_blank" class="quick-entry-btn">
+              <i class="fas fa-ticket-alt"></i>
+              <strong>卡券设置</strong>
+              <span>进入卡券价格配置</span>
+            </a>
+          </div>
+          <!-- 显式的操作按钮，直达后台 -->
+          <div style="margin-top: 16px;">
+            <a href="https://admin.5laoban.com/#/seat/list?__from=v3nf" target="_blank" class="btn-primary-link">
+              <i class="fas fa-arrow-right"></i> 打开后台管理
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 步骤 2：绑定微信订单提醒 -->
+      <div class="step-card">
+        <div class="step-header">
+          <span class="step-number">2</span>
+          <span class="step-title">
+            <i class="fab fa-weixin"></i> 绑定微信订单提醒
+          </span>
+        </div>
+        <div class="step-desc">
+          <p>
+            <i class="fas fa-qrcode"></i>
+            <span><strong>后台扫码绑定</strong> → 实时接收新订单、预约、消费通知</span>
+          </p>
+          <div style="background: #eefbf4; border-radius: 18px; padding: 12px 18px; border-left: 4px solid #18a058; margin: 10px 0 0 0;">
+            <i class="fas fa-exclamation-triangle" style="color: #18a058; margin-right: 10px;"></i>
+            <span style="font-weight: 500; color: #1d7a45;">未绑定时顾客下单您将收不到提醒</span>
+          </div>
+          <div style="margin-top: 14px;">
+            <a href="https://admin.5laoban.com/v5/setting/push-swither/list" target="_blank" class="btn-primary-link">
+              <i class="fas fa-bell"></i> 打开订单提醒设置
+            </a>
+          </div>
+          <div style="margin-top: 14px; display: flex; gap: 8px 14px; flex-wrap: wrap;">
+            <span class="action-badge" style="background: #e9f8f2;"><i class="fas fa-bell"></i> 新订单</span>
+            <span class="action-badge" style="background: #e9f8f2;"><i class="fas fa-calendar-check"></i> 预约</span>
+            <span class="action-badge" style="background: #e9f8f2;"><i class="fas fa-credit-card"></i> 消费通知</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 预配 + 教程 + 联系 区块 -->
+    <div class="footer-actions">
+      <div class="setup-summary">
+        <div class="setup-title">
+          <i class="fas fa-check-circle"></i> 系统基础配置已完成，无需重复设置
+        </div>
+        <div class="setup-subtitle">
+          ✅ 已帮您完成以下内容：
+        </div>
+        <div class="setup-list">
+          <span class="setup-item"><i class="far fa-calendar-check"></i> 预约规则设置</span>
+          <span class="setup-item"><i class="far fa-clock"></i> 营业时间配置</span>
+          <span class="setup-item"><i class="fas fa-palette"></i> 门店展示模板配置</span>
+        </div>
+        <div class="setup-note">
+          <i class="fas fa-info-circle"></i> 您只需完成：调整实际营业价格 + 绑定微信订单提醒
+        </div>
+      </div>
+      <div class="link-group">
+        <a href="https://sank2vueqgl.feishu.cn/wiki/Om0vwcBD0iB6P1kvMXUceCN4nlc?from=from_copylink" target="_blank"><i class="fas fa-book-open"></i> 详细教程</a>
+        <span class="support-tag"><i class="fas fa-headset"></i> 操作卡住群里联系</span>
+        <span style="background: #eaf8f0; border-radius: 30px; padding: 3px 14px; font-size: 14px; color: #1d7a45; display: inline-flex; align-items: center; gap: 4px;">
+          <i class="fas fa-fire" style="color: #18a058;"></i> 祝开业大吉
+        </span>
+      </div>
+    </div>
+
+    <!-- 额外小提示 -->
+    <div style="margin-top: 18px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 6px; padding: 0 6px;">
+      <span style="color: #4e6e7f; font-size: 14px; display: flex; align-items: center; gap: 8px;">
+        <i class="fas fa-check-circle" style="color: #18a058;"></i> 预约规则、营业时间、门店模板已完成配置，无需重复设置
+      </span>
+      <span style="color: #166a8f; font-size: 14px; background: #ecfaf4; padding: 2px 14px; border-radius: 40px;">
+        <i class="fas fa-link"></i> <a href="https://sank2vueqgl.feishu.cn/wiki/Om0vwcBD0iB6P1kvMXUceCN4nlc?from=from_copylink" target="_blank" style="color: #166a8f; text-decoration: none; border-bottom: 1px dotted #8db2cc;">详细教程：点击查看</a>
+      </span>
+    </div>
+
+    <!-- 最后的操作卡住提醒 -->
+    <div style="margin-top: 16px; background: transparent; border-radius: 40px; padding: 6px 0 2px 0; display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; border-top: 1px solid #dcefe8; padding-top: 16px;">
+      <span style="display: flex; align-items: center; gap: 8px; color: #165067; font-weight: 450; background: #eefaf5; padding: 4px 16px 4px 14px; border-radius: 40px;">
+        <i class="fas fa-comment-dots" style="color: #18a58e;"></i> 操作卡住群里联系
+      </span>
+      <span style="display: flex; align-items: center; gap: 4px; color: #1d7a45; font-weight: 500; background: #eefbf4; padding: 3px 18px 3px 14px; border-radius: 40px;">
+        <i class="fas fa-gem" style="color: #18a058;"></i> ～祝开业大吉
+      </span>
+    </div>
+
+  </div> <!-- end body-content -->
+</div> <!-- end card -->
+</body>
+</html>
